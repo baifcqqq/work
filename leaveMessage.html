@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			.container{
+				width: 1000px;
+				margin: 0 auto;
+			}
+			h1{
+				width: 1000px;
+				height: 50px;
+				line-height: 50px;
+				border-bottom: 1px solid black;
+			}
+			.content{
+				margin-top: 20px;
+				width: 1000px;
+				padding: 20px 0;
+				border: #FF6600 1px solid;
+			}
+			.content p{
+				padding: 5px 0;
+			}
+			.content p:hover{
+				background: #ccc;
+			}
+			.content p b{
+				float: right;
+				margin-left: 10px;
+			}
+			.content p a{
+				float: right;
+			}
+			.input textarea {
+				margin-top: 20px;
+				width: 1000px;
+				height: 60px;
+				outline: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>留言板:</h1>
+			<div class="content">
+				请输入留言内容。。。。
+				<!-- <p>
+					<i>1.</i>
+					<span>123</span>
+					<b>第1条</b>
+					<a href="javascript:;">删除</a>
+				</p> -->
+			</div>
+			<div class="input">
+				<textarea id="area" value=""></textarea>
+				<button type="button">发布留言</button>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var btn = document.getElementsByTagName("button")[0];
+			var area = document.getElementById("area");
+			var content = document.getElementsByClassName("content")[0];
+			var arr = [];
+			var all_a;
+			
+			btn.onclick = function (){
+				var text = area.value;
+				if(text.trim()){ //输入内容不为空执行下面的代码
+				area.value = "";
+				// 把值添加进数组
+				arr.push(text);
+				content.innerHTML = "";
+				// 生成元素
+				create();
+				// 获取所有的a标签
+				all_a = content.getElementsByTagName('a');
+				 for (var i = 0; i < arr.length; i++) {
+				 	(function(i){
+						// 添加点击事件
+						all_a[i].onclick = function(){
+							remove(i)
+						}
+				 	}(i))
+				 }
+				}
+			}
+			
+			function create(){
+				// 根据数组的长度创建元素
+				for (var i = 0; i < arr.length; i++) {
+					var p = document.createElement("p");
+					p.innerHTML = '<i>'+(i+1)+'.</i>'+
+				 					'<span>'+arr[i]+'</span>'+
+									'<b>第'+(i+1)+'条</b>'+
+									'<a href="javascript:;">删除</a>';				
+					content.appendChild(p);
+					// 每次调用给a添加点击事件
+					all_a = content.getElementsByTagName('a');
+					for (var j = 0; j < all_a.length; j++) {
+						(function(j){
+							all_a[j].onclick = function (){
+								remove (j);
+							}
+						}(j))
+					}
+				}
+			}
+			// 点击事件后执行代码
+			function remove (i){
+				 arr.splice(i,1);
+				 content.innerHTML = "";
+				 create();
+				if(arr.length == 0){
+					content.innerHTML = "请输入留言内容。。。。";
+				}
+			}
+		</script>
+	</body>
+</html>
